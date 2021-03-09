@@ -1,0 +1,36 @@
+<idea-plugin url="https://www.easysoc.org">
+    <id>org.easysoc.treadle</id>
+    <name>EasySoC Treadle</name>
+    <vendor url="https://www.easysoc.org">EasySoC</vendor>
+    <change-notes><![CDATA[
+        <ul>
+            <li>Interactive peek,poke symbols and advance the clock of the DUT</li>
+            <li>Observe the value of the selected symbol in the form of table and waveform</li>
+            <li>Copy WaveJSON Data to Clipboard</li>
+        </ul>
+    ]]></change-notes>
+    <description><![CDATA[
+    Interactive Firrtl circuit simulator based on <a href="https://github.com/chipsalliance/treadle">Treadle</a>.</br>
+    Usage: When opening a Firrtl file, the menu HDL->Treadle Simulator becomes available.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.easysoc.chisel</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <projectService serviceImplementation="org.easysoc.plugins.treadle.setting.ProjectConfig"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="Treadle" class="org.easysoc.plugins.treadle.actions.TreadleActionGroup">
+            <action id="TreadleSimulatorAction" class="org.easysoc.plugins.treadle.actions.TreadleSimulatorAction"
+                    text="Treadle Simulator" description="Interactively simulate the current circuit"/>
+            <add-to-group group-id="HDL"/>
+        </group>
+
+    </actions>
+</idea-plugin>
