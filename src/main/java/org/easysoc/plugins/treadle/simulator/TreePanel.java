@@ -18,7 +18,7 @@ public class TreePanel extends SimpleToolWindowPanel {
     public TreePanel() {
         super(true,true);
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(new JLabel("root"));
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
         tree = new SimpleTree(new DefaultTreeModel(root)) {
 
             private final JLabel myPane = new JLabel("Initializing ...", JLabel.CENTER);

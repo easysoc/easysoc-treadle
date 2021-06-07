@@ -1,16 +1,10 @@
 package org.easysoc.plugins.treadle.listener;
 
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.ui.treeStructure.SimpleTree;
 import org.easysoc.plugins.treadle.simulator.PokePanel;
 import org.easysoc.plugins.treadle.simulator.SimulatorWindow;
 import org.easysoc.plugins.treadle.simulator.WatchPanel;
 import org.easysoc.plugins.treadle.utils.DataKeys;
-import org.jetbrains.annotations.NotNull;
 import treadle.TreadleTester;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -42,7 +36,7 @@ public class TreeMouseListener extends MouseAdapter {
         TreePath selPath = tree.getClosestPathForLocation(e.getX(), e.getY());
         if (selPath != null) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
-            if (node.isLeaf()) {
+            if (node.isLeaf() && !node.getParent().toString().equals("root")) {
                 String symbol = node.getUserObject().toString();
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     if (e.getClickCount() == 2) {
