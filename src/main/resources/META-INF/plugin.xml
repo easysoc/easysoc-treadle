@@ -4,9 +4,10 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Interactive peek,poke symbols and advance the clock of the DUT</li>
-            <li>Observe the value of the selected symbol in the form of table and waveform</li>
-            <li>Copy WaveJSON Data to Clipboard</li>
+            <li>Interactively debug the circuit in Shell or Repl mode</li>
+            <li>Allow to set the output format</li>
+            <li>Show symbol width</li>
+            <li>Don't peeking symbol when there are no child elements</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -18,10 +19,15 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.easysoc.chisel</depends>
+    <depends>org.jetbrains.plugins.terminal</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <projectService serviceImplementation="org.easysoc.plugins.treadle.setting.ProjectConfig"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="org.jetbrains.plugins.terminal">
+        <localTerminalCustomizer implementation="org.easysoc.plugins.treadle.terminal.DefaultTerminalLocationCustomizer"/>
     </extensions>
 
     <actions>
@@ -29,6 +35,8 @@
         <group id="Treadle" class="org.easysoc.plugins.treadle.actions.TreadleActionGroup">
             <action id="TreadleSimulatorAction" class="org.easysoc.plugins.treadle.actions.TreadleSimulatorAction"
                     text="Treadle Simulator" description="Interactively simulate the current circuit"/>
+            <action id="ReplAction" class="org.easysoc.plugins.treadle.actions.ReplAction"
+                    text="Treadle Shell" description="Interactively simulate the current circuit"/>
             <add-to-group group-id="HDL"/>
         </group>
 

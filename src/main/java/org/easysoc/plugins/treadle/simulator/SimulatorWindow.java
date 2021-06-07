@@ -36,4 +36,8 @@ public class SimulatorWindow extends JFrame {
     public static DataContext getDataContext() {
         return DataManager.getInstance().getDataContext(simulatorPanel);
     }
+
+    public static SimulatorPanel getSimulatorPanel() {
+        return simulatorPanel;
+    }
 }

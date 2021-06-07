@@ -18,9 +18,11 @@ public class PokePanel {
     private JPanel pokePanel;
     private JComboBox comboBoxPokeFormat;
     private JButton pokeStepButton;
+    private JLabel labelWidth;
 
     private TotalCyclesAction totalCyclesAction;
     private WatchPanel watchPanel;
+    private SimulatorPanel simulatorPanel;
 
     private String selectedSignal = "";
     private HashMap<String, Integer> format = new HashMap<>();
@@ -59,6 +61,7 @@ public class PokePanel {
         if (treadleTester == null) {
             treadleTester = SimulatorWindow.getDataContext().getData(DataKeys.TREADLE_TESTER);
             watchPanel = SimulatorWindow.getDataContext().getData(DataKeys.WATCH_PANEL);
+            simulatorPanel = SimulatorWindow.getSimulatorPanel();
         }
         updateSymbol();
 
@@ -82,6 +85,7 @@ public class PokePanel {
         if (treadleTester == null) {
             treadleTester = SimulatorWindow.getDataContext().getData(DataKeys.TREADLE_TESTER);
             watchPanel = SimulatorWindow.getDataContext().getData(DataKeys.WATCH_PANEL);
+            simulatorPanel = SimulatorWindow.getSimulatorPanel();
         }
         treadleTester.step(i);
         updateSymbol();
@@ -92,7 +96,8 @@ public class PokePanel {
     public void updateSymbol() {
         if (!selectedSignal.isEmpty()) {
             labelSymbol.setText(selectedSignal);
-            labelValue.setText(treadleTester.peek(selectedSignal).toString(10));
+            labelValue.setText(treadleTester.peek(selectedSignal).toString(simulatorPanel.getOutFormat()));
+            labelWidth.setText(String.valueOf(treadleTester.engine().symbolTable().get(selectedSignal).get().bitWidth()));
         }
     }
 

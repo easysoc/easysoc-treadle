@@ -14,4 +14,5 @@ public class DataKeys {
     public static final DataKey<WaveJSONBrowser> WAVEJSON_BROWSER = DataKey.create("WAVEJSON_BROWSER");
     public static final DataKey<String> FIRRTL_FILE = DataKey.create("FIRRTL_FILE");
 
+    public static final int RollBackBuffers = 32;
 }

@@ -25,6 +25,7 @@ public class WatchPanel {
 
     private TreadleTester treadleTester;
     private WaveJSONBrowser waveJSONBrowser;
+    private SimulatorPanel simulatorPanel;
 
     private SmartList<String> watchSymbols = new SmartList<>();
 
@@ -84,13 +85,15 @@ public class WatchPanel {
         if (treadleTester == null) {
             treadleTester = SimulatorWindow.getDataContext().getData(DataKeys.TREADLE_TESTER);
             waveJSONBrowser = SimulatorWindow.getDataContext().getData(DataKeys.WAVEJSON_BROWSER);
-        }
-        Project project = SimulatorWindow.getDataContext().getData(CommonDataKeys.PROJECT);
-        String firrtlFile = SimulatorWindow.getDataContext().getData(DataKeys.FIRRTL_FILE);
-        SmartList<String> symbols = ProjectConfig.getInstance(project).getWatchSymbols(firrtlFile);
-        if (symbols != null) {
-            watchSymbols = symbols;
-            tableModel.update(true);
+            simulatorPanel = SimulatorWindow.getSimulatorPanel();
+
+            Project project = SimulatorWindow.getDataContext().getData(CommonDataKeys.PROJECT);
+            String firrtlFile = SimulatorWindow.getDataContext().getData(DataKeys.FIRRTL_FILE);
+            SmartList<String> symbols = ProjectConfig.getInstance(project).getWatchSymbols(firrtlFile);
+            if (symbols != null) {
+                watchSymbols = symbols;
+                tableModel.update(true);
+            }
         }
     }
 
@@ -111,17 +114,18 @@ public class WatchPanel {
         }
 
         public void update(boolean rebuild) {
+            int format = simulatorPanel.getOutFormat();
             if (rebuild) {  // add or remove Symbol
                 data = new String[watchSymbols.size()][columnNames.length];
                 for (int i = 0, j = watchSymbols.size(); i < j; i++) {
                     String symbol = watchSymbols.get(i);
                     data[i][0] = symbol;
-                    data[i][1] = treadleTester.peek(symbol).toString(10);
+                    data[i][1] = treadleTester.peek(symbol).toString(format);
                 }
             } else {    // step
                 for (int i = 0, j = watchSymbols.size(); i < j; i++) {
                     String symbol = watchSymbols.get(i);
-                    data[i][1] = treadleTester.peek(symbol).toString(10);
+                    data[i][1] = treadleTester.peek(symbol).toString(format);
                 }
             }
             fireTableDataChanged();
@@ -134,7 +138,7 @@ public class WatchPanel {
         public void poke(String symbol) {
             int row = watchSymbols.indexOf(symbol);
             if (row != -1) {
-                data[row][1] = treadleTester.peek(symbol).toString(10);
+                data[row][1] = treadleTester.peek(symbol).toString(simulatorPanel.getOutFormat());
             }
             fireTableDataChanged();
         }

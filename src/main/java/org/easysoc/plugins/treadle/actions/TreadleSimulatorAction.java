@@ -13,7 +13,7 @@ public class TreadleSimulatorAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
         ApplicationManager.getApplication().invokeLater(() -> {
-            new SimulatorWindow(file.getCanonicalPath(), e.getProject()).setVisible(true);
+            new SimulatorWindow(file.getPath(), e.getProject()).setVisible(true);
         });
     }
 }

@@ -1,6 +1,7 @@
 package org.easysoc.plugins.treadle.simulator;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -15,6 +16,7 @@ import firrtl.FileUtils;
 import firrtl.annotations.Annotation;
 import firrtl.stage.FirrtlSourceAnnotation;
 import org.easysoc.plugins.treadle.actions.CyclesFieldAction;
+import org.easysoc.plugins.treadle.actions.OutFormatAction;
 import org.easysoc.plugins.treadle.browser.WaveJSONBrowser;
 import org.easysoc.plugins.treadle.manager.ViewManager;
 import org.easysoc.plugins.treadle.setting.ProjectConfig;
@@ -39,6 +41,7 @@ public class SimulatorPanel extends SimpleToolWindowPanel {
 
     private Project project;
     private String firrtlFile;
+    private int outFormat = 10;
 
     private TotalCyclesAction totalCyclesAction;
 
@@ -62,27 +65,33 @@ public class SimulatorPanel extends SimpleToolWindowPanel {
                 }
             }
         });
-        actionGroup.addSeparator();
 
+        actionGroup.addSeparator();
         CyclesFieldAction cyclesField = new CyclesFieldAction("Cycles", "Cycles to perform", null, 2);
-        totalCyclesAction = new TotalCyclesAction("", "", null, 20);
 
         actionGroup.add(cyclesField);
         actionGroup.add(new AnAction("Step Cycles", "To advance the clock of the DUT", AllIcons.Actions.RunAll) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 pokePanel.step(cyclesField.getCycles());
-//                System.out.println(treadleTester.cycleCount());
             }
         });
         actionGroup.add(new AnAction("Step", "To advance the clock of the DUT", AllIcons.Actions.Execute) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 pokePanel.step(1);
-//                System.out.println(treadleTester.cycleCount());
             }
         });
         actionGroup.addSeparator();
+        actionGroup.add(new OutFormatAction());
+        actionGroup.add(new AnAction("Help", "Open help link", AllIcons.Actions.Help) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                BrowserUtil.browse("https://github.com/easysoc/easysoc-treadle");
+            }
+        });
+
+        totalCyclesAction = new TotalCyclesAction("", "", null, 20);
         actionGroup.add(totalCyclesAction);
 
         ActionToolbar actionToolbar = actionManager.createActionToolbar(ActionPlaces.TOOLBAR, actionGroup, true);
@@ -96,7 +105,7 @@ public class SimulatorPanel extends SimpleToolWindowPanel {
                 String firrtlString = FileUtils.getText(firrtlFile);
                 List<Annotation> annotationSeq = new ArrayList<>();
                 annotationSeq.add(new FirrtlSourceAnnotation(firrtlString));
-                annotationSeq.add(new RollBackBuffersAnnotation(32));
+                annotationSeq.add(new RollBackBuffersAnnotation(DataKeys.RollBackBuffers));
                 treadleTester = TreadleTester.apply(
                         AnnotationSeq.apply(JavaConverters.asScalaIteratorConverter(annotationSeq.iterator()).asScala().toSeq())
                 );
@@ -178,5 +187,13 @@ public class SimulatorPanel extends SimpleToolWindowPanel {
         }
 
         return super.getData(dataId);
+    }
+
+    public int getOutFormat() {
+        return outFormat;
+    }
+
+    public void setOutFormat(int outFormat) {
+        this.outFormat = outFormat;
     }
 }

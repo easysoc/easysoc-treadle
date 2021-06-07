@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     implementation ('edu.berkeley.cs:treadle_2.12:1.5-SNAPSHOT') {
-        exclude module: 'scala-jline'
+//        exclude module: 'scala-jline'
 //        exclude module: 'protobuf-java'
     }
 }
@@ -32,7 +32,7 @@ intellij {
     localPath "/home/itviewer/Downloads/software/chip"
 
     // https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin/
-    // plugins 'PsiViewer:201.6251.22-EAP-SNAPSHOT.3'
+     plugins 'org.jetbrains.plugins.terminal'
     downloadSources false
 }
 
